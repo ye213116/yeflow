@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
+WRAPPER_PROPERTIES="$BASE_DIR/.mvn/wrapper/maven-wrapper.properties"
+
+if [ ! -f "$WRAPPER_PROPERTIES" ]; then
+  echo "Missing $WRAPPER_PROPERTIES" >&2
+  exit 1
+fi
+
+DISTRIBUTION_URL="$(grep '^distributionUrl=' "$WRAPPER_PROPERTIES" | cut -d'=' -f2-)"
+if [ -z "$DISTRIBUTION_URL" ]; then
+  echo "distributionUrl is not configured in $WRAPPER_PROPERTIES" >&2
+  exit 1
+fi
+
+ARCHIVE_NAME="$(basename "$DISTRIBUTION_URL")"
+MAVEN_DIR_NAME="${ARCHIVE_NAME%-bin.zip}"
+MAVEN_HOME="$BASE_DIR/.mvn/wrapper/$MAVEN_DIR_NAME"
+ARCHIVE_PATH="$BASE_DIR/.mvn/wrapper/$ARCHIVE_NAME"
+
+if [ ! -x "$MAVEN_HOME/bin/mvn" ]; then
+  mkdir -p "$BASE_DIR/.mvn/wrapper"
+
+  if [ ! -f "$ARCHIVE_PATH" ]; then
+    if command -v curl >/dev/null 2>&1; then
+      curl -fsSL "$DISTRIBUTION_URL" -o "$ARCHIVE_PATH"
+    elif command -v wget >/dev/null 2>&1; then
+      wget -q "$DISTRIBUTION_URL" -O "$ARCHIVE_PATH"
+    else
+      echo "Neither curl nor wget is available to download Maven." >&2
+      exit 1
+    fi
+  fi
+
+  if ! command -v unzip >/dev/null 2>&1; then
+    echo "unzip command is required to extract Maven distribution." >&2
+    exit 1
+  fi
+
+  unzip -q -o "$ARCHIVE_PATH" -d "$BASE_DIR/.mvn/wrapper"
+fi
+
+exec "$MAVEN_HOME/bin/mvn" "$@"
