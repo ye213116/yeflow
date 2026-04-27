@@ -9,6 +9,8 @@
 # Backend
 api/target/
 api/.mvn/wrapper/apache-maven-*/
+api/data/*.mv.db
+api/data/*.trace.db
 
 # Frontend
 web/node_modules/

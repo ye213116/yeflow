@@ -22,6 +22,8 @@ The repository currently includes the following delivered phases:
 - Phase 1: backend workflow CRUD with serial node validation
 - Phase 2: backend serial runtime execution with persisted run and step tracking
 - Phase 3: frontend workflow console for editing workflows and viewing run details
+- Phase 4: acceptance wording and documentation alignment
+- Phase 5: repository hygiene for local runtime artifacts and onboarding clarity
 
 Current MVP limits:
 
@@ -41,6 +43,22 @@ Current MVP limits:
 - `POST /api/workflows/{workflowId}/runs`
 - `GET /api/runs/{runId}`
 
+## Fresh Clone Setup
+
+1. Start from the repository root.
+2. Use `./mvnw` for backend commands and `pnpm` for frontend commands.
+3. If `api/data/` does not exist in a fresh clone, create it once before the first backend run because local H2 files are stored there.
+4. Install frontend dependencies before starting the Vite dev server.
+
+```bash
+mkdir -p api/data
+```
+
+```bash
+cd web
+pnpm install
+```
+
 ## Local Run
 
 Backend:
@@ -54,7 +72,6 @@ Frontend:
 
 ```bash
 cd web
-pnpm install
 pnpm dev
 ```
 
@@ -78,5 +95,6 @@ pnpm build
 
 - Do not use global `mvn`; use `./mvnw` only.
 - Use `pnpm` for all frontend package commands.
+- `api/data/paiagent-db.mv.db` and `api/data/paiagent-db.trace.db` are local H2 runtime artifacts and should not be committed.
 - Do not run full test suites as part of the AI delivery flow in this repository.
-- See `docs/phase-0-init-spec.md` through `docs/phase-4-acceptance-alignment-spec.md` for phase-by-phase scope.
+- See `docs/` for phase-by-phase scope and implementation boundaries.

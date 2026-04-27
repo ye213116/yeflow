@@ -27,7 +27,7 @@ export function WorkflowListPage({
         <div>
           <p style={eyebrowStyle}>PaiAgent MVP</p>
           <h1 style={titleStyle}>Workflow Console</h1>
-          <p style={subtitleStyle}>Phase 3 keeps editing and debugging inside one focused screen.</p>
+          <p style={subtitleStyle}>Edit saved workflows and inspect runtime detail from one focused MVP console.</p>
         </div>
         <div style={sidebarActionStyle}>
           <button style={ghostButtonStyle} type="button" onClick={onRefresh}>
